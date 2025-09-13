@@ -1,5 +1,3 @@
-# MeshGen - GameMaker Mesh Generator
-
 An interactive web tool for generating meshes for GameMaker Studio projects using 2D lighting engines.
 
 ## 🎮 Compatible Engines
