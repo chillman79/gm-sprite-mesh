@@ -74,15 +74,18 @@
             </UTooltip>
 
 
-            <!-- <UTooltip text="Generate Mesh" :kbds="['G']">
+            <UTooltip text="Generate Mesh" :kbds="['G']">
                 <UButton @click="generateAutoMesh" size="lg" color="primary" square variant="outline">
                     <Icon name="solar:magic-stick-3-linear" class="w-5 h-5" />
                 </UButton>
-            </UTooltip> -->
+            </UTooltip>
         </div>
         <div class="py-4 px-4 gap-2 !w-fit flex justify-around items-center h-full z-50 bg-gray-900 rounded-full after:rounded-full border border-1 border-white/30 bottom-menu">
             <UInput label="Origin X" size="sm" variant="outline" placeholder="Origin X" v-model="xOrigin" />
             <UInput label="Origin Y" size="sm" variant="outline" placeholder="Origin Y" v-model="yOrigin" />
+            <UButton @click="centerOrigin" size="sm" color="primary" square variant="outline">
+                Center
+            </UButton>
         </div>
     </div>
 </template>
@@ -99,7 +102,7 @@ const xOrigin = useXOrigin()
 const yOrigin = useYOrigin()
 const exportModal = useExportModal()
 const importModal = useImportModal()
-
+const originalImageData = useOriginalImageData();
 
 const saveMesh = () => {
     exportModal.value = true
@@ -115,7 +118,7 @@ const clearMesh = () => {
 }
 
 const generateAutoMesh = () => {
-    // todo: 
+    canvas.redrawImageWithZoom(true)
 }
 
 const undo = () => {
@@ -125,32 +128,6 @@ const undo = () => {
 const redo = () => {
     // todo
 }   
-
-watch(xOrigin, () => {
-    if (!mesh.points.value[0]) {
-        mesh.addPoint(xOrigin.value, yOrigin.value)
-    }
-    else {
-        mesh.movePoint(mesh.points.value[0].id, xOrigin.value, yOrigin.value)
-    }
-    canvas.redrawImageWithZoom()
-})
-watch(yOrigin, () => {
-    if (!mesh.points.value[0]) {
-        mesh.addPoint(xOrigin.value, yOrigin.value)
-    }
-    else {
-        mesh.movePoint(mesh.points.value[0].id, xOrigin.value, yOrigin.value)
-    }
-    canvas.redrawImageWithZoom()
-})
-
-watch(() => mesh.points.value, () => {
-    if (mesh.points.value[0]) {
-        xOrigin.value = mesh.points.value[0].x
-        yOrigin.value = mesh.points.value[0].y
-    }
-}, { deep: true })
 
 defineShortcuts({
     'a': () => {
@@ -194,6 +171,9 @@ defineShortcuts({
     },
 })
 
-
+const centerOrigin = () => {
+    xOrigin.value = originalImageData.value?.width / 2;
+    yOrigin.value = originalImageData.value?.height / 2;  
+}
 
 </script>

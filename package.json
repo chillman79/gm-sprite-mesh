@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare", 
-    "build:github": "NUXT_APP_BASE_URL=https://chillman79.github.io/gm-sprite-mesh/ npx nuxt build --preset github_pages"
+    "build:github": "npx nuxt build"
   },
   "dependencies": {
     "@nuxt/ui": "3.3.3",

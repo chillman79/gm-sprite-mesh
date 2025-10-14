@@ -14,6 +14,7 @@ export const CANVAS_GRID_COLORS = {
     stroke: '#e8e8e8',
 }
 
+
 export const useCanvas = () => {
 
     const mesh = useMesh();
@@ -26,6 +27,7 @@ export const useCanvas = () => {
     const lastMousePosition = useLastMousePosition();
     const currentMousePosition = useCurrentMousePosition();
     const draggedPoint = useDraggedPoint();
+    const automesh = useAutomesh();
 
     const pixelSize = computed(() => Math.max(1, Math.floor(zoomLevel.value)));
 
@@ -92,12 +94,21 @@ export const useCanvas = () => {
         return tempCtx.getImageData(0, 0, image.width, image.height);
     }
 
-    const redrawImageWithZoom = () => {
+    const isPixelOpaque = (imageData: ImageData, x: number, y: number)  =>{
+        if (x < 0 || y < 0 || x >= imageData.width || y >= imageData.height) {
+            return false; // fuera de límites cuenta como transparente
+        }
+        const index = (y * imageData.width + x) * 4;
+        const a = imageData.data[index + 3] ?? 0;
+        return a > 0;
+    }
+
+    const redrawImageWithZoom = (enableAutomesh?: boolean) => {
         if (!originalImageData.value || !canvas.value) return;
 
         const ctx = canvas.value.getContext('2d')!;
         const imageData = originalImageData.value;
-       
+
 
         const rect = canvas.value.getBoundingClientRect();
         canvas.value.width = rect.width;
@@ -114,6 +125,7 @@ export const useCanvas = () => {
         const centerX = (canvas.value.width - spriteWidth) / 2 + spritePosition.value.x;
         const centerY = (canvas.value.height - spriteHeight) / 2 + spritePosition.value.y;
 
+        const borderPoints = [];
         for (let y = 0; y < imageData.height; y++) {
             for (let x = 0; x < imageData.width; x++) {
                 const pixelIndex = (y * imageData.width + x) * 4;
@@ -123,6 +135,27 @@ export const useCanvas = () => {
                 const a = imageData.data[pixelIndex + 3];
 
                 if (a && a > 0) {
+                    // comprobar vecinos
+                    const neighbors = [
+                        [x - 1, y], // izquierda
+                        [x + 1, y], // derecha
+                        [x, y - 1], // arriba
+                        [x, y + 1]  // abajo
+                    ];
+
+                    let isBorder = false;
+                    for (const [nx, ny] of neighbors) {
+                        if (nx && ny && !isPixelOpaque(imageData, nx, ny)) {
+                            isBorder = true;
+                            break;
+                        }
+                    }
+
+                    if (isBorder) {
+                        borderPoints.push({id: '', x, y})
+                    }
+
+
                     ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a / 255})`;
                     ctx.fillRect(
                         centerX + x * pixelSize.value,
@@ -132,6 +165,10 @@ export const useCanvas = () => {
                     );
                 }
             }
+        }
+
+        if (enableAutomesh) {
+            automesh.automesh(borderPoints);
         }
 
         drawMesh(ctx, centerX, centerY);
@@ -269,7 +306,7 @@ export const useCanvas = () => {
             case Tool.removePoint:
                 const pointToRemove = mesh.findNearestPoint(imageCoords.x, imageCoords.y, 10);
                 if (pointToRemove) {
-                    mesh.removePoint(pointToRemove.id);
+                    mesh.removePoint(pointToRemove.id!);
                     redrawImageWithZoom();
                 }
                 break;
@@ -317,8 +354,9 @@ export const useCanvas = () => {
         }
 
         lastMousePosition.value = currentPosition;
-
+        
         redrawImageWithZoom();
+
     }
 
     const handleMouseUp = () => {
@@ -329,6 +367,7 @@ export const useCanvas = () => {
             if (canvas.value) {
                 canvas.value.style.cursor = '';
             }
+            
         }
     }
 

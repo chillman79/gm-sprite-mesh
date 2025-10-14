@@ -4,8 +4,8 @@ An interactive web tool for generating meshes for GameMaker Studio projects usin
 
 This generator is designed to work with:
 
-- **[Glare Engine](https://tiz010.itch.io/glare-engine)** - 2D Lighting Engine by Tiz010
 - **[Crystal 2D Lighting Engine](https://foxyofjungle.itch.io/crystal-2d-lighting-engine)** - 2D Lighting Engine by FoxyOfJungle
+- **[Glare Engine](https://tiz010.itch.io/glare-engine)** - 2D Lighting Engine by Tiz010
 
 ## 🚀 Quick Access
 

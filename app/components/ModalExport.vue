@@ -16,9 +16,12 @@
 
 const exportModal = useExportModal()
 const mesh = useMesh()
+const xOrigin = useXOrigin()
+const yOrigin = useYOrigin()
 
 const meshString = computed(() => {
-    return `[${mesh.points.value.map(point => `[${point.x},${point.y}]`).join(',')}]`
+
+    return `[${mesh.points.value.map(point => `[${point.x - xOrigin.value},${point.y - yOrigin.value}]`).join(',')}]`
 })
 
 const copyMesh = () => {

@@ -34,16 +34,23 @@
 
 <script setup lang="ts">
 
-const selectedImage = ref<File | null>(null)
+
+defineShortcuts({
+   'n': () => {
+      openImageInput();
+   }
+})
+
+const selectedImage = ref<File>()
 const canvasRef = useTemplateRef('canvas')
 const emptyCanvasRef = useTemplateRef('emptyCanvas')
 const tools = useTools(); 
 const canvas = useCanvas();
 
+const loadImage = async (event: Event) => {
+   if (!import.meta.client) return;
+   await nextTick();
 
-
-
-const loadImage = (event: Event) => {
    const file = (event.target as HTMLInputElement).files?.[0]
    if (file) {
       selectedImage.value = file; 

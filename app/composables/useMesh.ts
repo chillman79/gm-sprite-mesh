@@ -1,5 +1,5 @@
 export interface Point {
-    id: string;
+    id?: string;
     x: number;
     y: number;
 }
@@ -14,6 +14,8 @@ export const useMesh = () => {
     }
 
     const addPoint = (x: number, y: number) => {
+        const exists = points.value.find((p) => p.x === x && p.y === y); 
+        if (exists) return;
         
         const newPoint: Point = {
             id: generateId(),
