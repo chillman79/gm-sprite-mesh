@@ -5,7 +5,7 @@
       <template v-if="selectedImage">
          <div class="relative h-full w-full overflow-hidden ">
             <canvas 
-               ref="canvas" 
+               ref="mainCanvas" 
                :class="`absolute inset-0 w-full h-full ${tools.getCursor.value}`"
                @mousedown="handleMouseDown"
                @mousemove="handleMouseMove"
@@ -43,16 +43,14 @@ defineShortcuts({
    }
 })
 
-const selectedImage = ref<File>()
-const canvasRef = useTemplateRef('canvas')
+const selectedImage = ref<File | undefined>(undefined)
+const canvasRef = useTemplateRef('mainCanvas')
 const emptyCanvasRef = useTemplateRef('emptyCanvas')
 const tools = useTools(); 
 const canvas = useCanvas();
 
 const loadImage = async (event: Event) => {
-   if (!import.meta.client) return;
-   await nextTick();
-
+   
    const file = (event.target as HTMLInputElement).files?.[0]
    if (file) {
       selectedImage.value = file; 

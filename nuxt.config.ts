@@ -8,5 +8,6 @@ export default defineNuxtConfig({
     build: {
        minify: false,
     }
-  }
+  }, 
+  ssr: false,
 })
