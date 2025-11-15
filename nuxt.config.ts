@@ -9,4 +9,5 @@ export default defineNuxtConfig({
        minify: false,
     }
   }, 
+  ssr: false,
 })
