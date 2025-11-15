@@ -14,6 +14,7 @@
             />
          </div>
          <Tools />
+         <Legend />
       </template>
       <template v-else>
          <div class="relative h-full w-full overflow-hidden">
@@ -29,6 +30,7 @@
       </template>
       <ModalExport />
       <ModalImport />
+    
    </div>
 </template>
 

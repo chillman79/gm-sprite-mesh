@@ -74,11 +74,11 @@
             </UTooltip>
 
 
-            <UTooltip text="Generate Mesh" :kbds="['G']">
+            <!-- <UTooltip text="Generate Mesh" :kbds="['G']">
                 <UButton @click="generateAutoMesh" size="lg" color="primary" square variant="outline">
                     <Icon name="solar:magic-stick-3-linear" class="w-5 h-5" />
                 </UButton>
-            </UTooltip>
+            </UTooltip> -->
         </div>
         <div class="py-4 px-4 gap-2 !w-fit flex justify-around items-center h-full z-50 bg-gray-900 rounded-full after:rounded-full border border-1 border-white/30 bottom-menu">
             <UInput label="Origin X" size="sm" variant="outline" placeholder="Origin X" v-model="xOrigin" />
@@ -154,9 +154,9 @@ defineShortcuts({
     'delete': () => {
         clearMesh()
     },
-    'g': () => {
-        generateAutoMesh()
-    },
+    // 'g': () => {
+    //     generateAutoMesh()
+    // },
     'meta_z': () => {
        undo()
     },
