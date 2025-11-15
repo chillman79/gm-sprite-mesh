@@ -18,6 +18,7 @@ const exportModal = useExportModal()
 const mesh = useMesh()
 const xOrigin = useXOrigin()
 const yOrigin = useYOrigin()
+const toast = useToast()
 
 const meshString = computed(() => {
 
@@ -26,6 +27,9 @@ const meshString = computed(() => {
 
 const copyMesh = () => {
     navigator.clipboard.writeText(meshString.value)
+    toast.add({
+        description: 'Mesh copied to clipboard'
+    })
 }
 
 </script>

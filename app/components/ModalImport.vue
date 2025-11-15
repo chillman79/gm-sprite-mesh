@@ -18,6 +18,8 @@ const importModal = useImportModal()
 const mesh = useMesh()
 const canvas = useCanvas();
 const toast = useToast()
+const xOrigin = useXOrigin()
+const yOrigin = useYOrigin()
 
 const model = ref<string>('')
 
@@ -35,7 +37,7 @@ const importMesh = () => {
             const [x, y] = point.split(',')
     
             if (x && y) {
-                mesh.addPoint(parseInt(x), parseInt(y))
+                mesh.addPoint(parseInt(x.trim(), 10) + xOrigin.value, parseInt(y.trim(), 10) + yOrigin.value)
             }
         })
     
